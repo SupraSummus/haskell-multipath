@@ -1,3 +1,5 @@
+{-# LANGUAGE FlexibleContexts #-}
+
 module Codec.Text.Multipath (
     Multipath,
     fromBytes, toBytes,
@@ -12,6 +14,7 @@ import Text.Parsec.Prim
 import Text.Parsec.Error
 import Data.Word
 import Data.Either
+import Control.Monad.Except
 
 type Multipath = [String]
 
@@ -21,11 +24,11 @@ separatorChar = '/'
 escapeChar :: Char
 escapeChar = '\\'
 
-fromBytes :: [Word8] -> Either String Multipath
+fromBytes :: (MonadError String m) => [Word8] -> m Multipath
 fromBytes = fromString . UTF8.decode
 
-fromString :: String -> Either String Multipath
-fromString = either (Left . show) (Right) . parse parseMultihash "mutipath"
+fromString :: (MonadError String m) => String -> m Multipath
+fromString s = either (throwError . show) (return) $ (parse parseMultihash s) s
 
 toBytes :: Multipath -> [Word8]
 toBytes = UTF8.encode . toString
