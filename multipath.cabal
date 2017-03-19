@@ -10,10 +10,8 @@ license:             MIT
 license-file:        LICENSE
 author:              Jan Rydzewski
 maintainer:          flegmer@gmail.com
--- copyright:           
 category:            Codec
 build-type:          Simple
-extra-source-files:  ChangeLog.md
 cabal-version:       >=1.10
 
 source-repository head
@@ -21,9 +19,23 @@ source-repository head
   location: git://github.com/SupraSummus/haskell-multipath.git
 
 library
-  exposed-modules:     Codec.Text.Multipath
-  -- other-modules:       
-  -- other-extensions:    
-  build-depends:       base >=4.9 && <4.10, utf8-string >=1.0 && <1.1, parsec >=3.1 && <3.2, mtl ==2.2.1
-  -- hs-source-dirs:      
+  hs-source-dirs:      src
+  exposed-modules:     Codec.Multipath
+  build-depends:       base ==4.9.*
+                     , parsec ==3.1.*
+                     , mtl ==2.2.*
+                     , bytestring ==0.10.*
+                     , utf8-string ==1.0.*
+  default-language:    Haskell2010
+  default-extensions:  FlexibleContexts
+
+test-suite multipath-test
+  type:                exitcode-stdio-1.0
+  hs-source-dirs:      test
+  main-is:             Spec.hs
+  build-depends:       base
+                     , multipath
+                     , hspec
+                     , bytestring
+  ghc-options:         -threaded -rtsopts -with-rtsopts=-N
   default-language:    Haskell2010
